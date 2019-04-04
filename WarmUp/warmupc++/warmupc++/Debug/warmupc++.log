@@ -1,0 +1,5 @@
+﻿  Main.cpp
+d:\git\computer networks\warmup\warmupc++\main.cpp(35): warning C4018: '<': signed/unsigned mismatch
+d:\git\computer networks\warmup\warmupc++\main.cpp(46): warning C4018: '<': signed/unsigned mismatch
+d:\git\computer networks\warmup\warmupc++\main.cpp(56): warning C4018: '<': signed/unsigned mismatch
+  warmupc++.vcxproj -> D:\GIT\Computer Networks\WarmUp\warmupc++\Debug\warmupc++.exe

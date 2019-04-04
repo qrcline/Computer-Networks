@@ -1,25 +1,29 @@
+#Quinton Cline
+#Networks Warmup
+
+
 def hello():
     name = input("What is your name?")
     print("Hello ", name)
 
 #reads in a file and squashes it
 def readFile():
-     fileName=input("Please input the file name?")
+    fileName=input("Please input the file name of the text you want to squash?")
     #fileName = "test.txt"
     file = open(fileName, "r")
     cleanFile = file.read()
     cleanFile = cleanFile.replace(" ", "")  #takes out all the spaces
     cleanFile = cleanFile.replace("\n", "") #takes out all the end lines
-    cleanFile = cleanFile.lower()           #putts all to lower case
-    print(cleanFile)                        #prints the squashed file
-    for number in range(97, 123):           #for loop for counting
+    cleanFile = cleanFile.lower()
+    print(cleanFile)
+    for number in range(97, 123):
         count = cleanFile.count(chr(number))
         print(chr(number) + " " + str(count))
     for number in range(48, 58):
         count = cleanFile.count(chr(number))
         print(chr(number) + " " + str(count))
 
-
+#flops the array
 def arraySwitch(array):
     print(array)
     array.reverse()
@@ -57,8 +61,9 @@ class Node:
 ############################################
 
 
-# hello()
-# readFile()
+hello()
+readFile()
+print("Array swap")
 array=[1,2,3,4,5,6,7,8,9]
 arraySwitch(array)
 
@@ -69,6 +74,6 @@ node3 = Node(42)
 node1.nextNode = node2 # 11->56
 node2.nextNode = node3 # 56->42
 #node3.nextNode=node1  #un comment this to make a loop
-
+print("Linked list check")
 print(node1.checkLoop())
 input("Press enter to exit")
