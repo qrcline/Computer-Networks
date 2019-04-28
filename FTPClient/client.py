@@ -72,12 +72,17 @@ while 1:
     message = bytes(commandSend, 'utf-8')
     commandSocket.send(message)
     serverMessage = commandSocket.recv(1024).decode('utf-8')
-    portReturns= "hello"#serverMessage[-2:4]
-  #  print(serverMessage)
-    print(portReturns)
-    #if(command=="PASV"):
-     #   dataSocket = socket(AF_INET, SOCK_STREAM)  # TCP SOCKET
-     #   dataSocket.connect((serverName, 240))
-     #   serverMessage = dataSocket.recv(1024).decode('utf-8')
-     #   print(serverMessage)
+    serverMessage=str(serverMessage)
+    
+    print(serverMessage)
+ 
+    if(command=="PASV"):
+        #portReturns=serverMessage[45:]
+        portReturns=serverMessage[-7:]
+        actualPortReturns=portReturns[:3]
+        print(actualPortReturns)
+        dataSocket = socket(AF_INET, SOCK_STREAM)  # TCP SOCKET
+        dataSocket.connect((serverName, int(actualPortReturns)))
+        serverMessage = dataSocket.recv(1024).decode('utf-8')
+        print(serverMessage)
 temp=input("Press enter to exit")
