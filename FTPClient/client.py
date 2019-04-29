@@ -136,6 +136,7 @@ while 1:
                         break
                         # write data to a file
                     f.write(data)
+
             dataSocket.close()
             f.close()
         elif(command[:4]=="list"):
@@ -146,6 +147,8 @@ while 1:
             dataSocket.connect((serverName, actualPortReturn))
             serverMessage = dataSocket.recv(1024).decode('utf-8')
             print(serverMessage)
+
+
         # with open('received_file.txt', 'wb') as f:
         #     print("file opened")
         #     while True:
@@ -158,7 +161,12 @@ while 1:
         #         f.write(data)
 
         # f.close()
-            dataSocket.close()
+
+        while(serverMessage[:3]!="226"):
+            serverMessage = commandSocket.recv(1024).decode('utf-8')
+            print(serverMessage)
+        dataSocket.close()
+        print("Path Closed")
         print("-------------")
 
 temp=input("Press enter to exit")
