@@ -17,11 +17,27 @@ import sys
 #        it waits for user input and sends the user
 #        input to the server
 
+command=""
+serverMessage=""
+#Gets the user input that goes into the command socket
 def getUserInput(commandSocket):
     while(1):
-        clientMessage = input()
-        message = bytes(clientMessage, 'utf-8')
+        #global command
+        command = input()
+        commandSend = command + "\r\n"
+        message = bytes(commandSend, 'utf-8')
         commandSocket.send(message)
+
+
+#Waits for a response on the command socket and prints it
+def getCommandResponse(commandSocket):
+    while(1):
+        serverMessage = commandSocket.recv(1024).decode('utf-8')
+        serverMessage = str(serverMessage)
+        serverMessage="Command Port Message: "+serverMessage
+        print(serverMessage)
+
+
 
 
 # #Checks if correct number of command line arguments
@@ -59,6 +75,12 @@ serverMessage = commandSocket.recv(1024).decode('utf-8')
 print(serverMessage)
 
 
+#This creates the thread for user input
+#_thread.start_new_thread(getUserInput,(commandSocket,))
+
+#This creates the thread for server command port response
+#_thread.start_new_thread(getCommandResponse,(commandSocket,))
+
 #This gets confirmation from the server
 
 
@@ -73,16 +95,49 @@ while 1:
     commandSocket.send(message)
     serverMessage = commandSocket.recv(1024).decode('utf-8')
     serverMessage=str(serverMessage)
-    
     print(serverMessage)
- 
+
     if(command=="PASV"):
-        #portReturns=serverMessage[45:]
+        print("Entering PASV code")
+    #     portReturns=serverMessage[45:]
+    #     portReturns=serverMessage[-7:]
+    #     actualPortReturns=portReturns[:3]
+    #     actualPortReturns= (169*256)+int(actualPortReturns)
+    #     print(actualPortReturns)
+    #     dataSocket = socket(AF_INET, SOCK_STREAM)  # TCP SOCKET
+    #     dataSocket.connect((serverName, actualPortReturns))
+    #     serverMessage = dataSocket.recv(1024).decode('utf-8')
+    #     print(serverMessage)
+
+        portReturns=serverMessage[45:]
         portReturns=serverMessage[-7:]
         actualPortReturns=portReturns[:3]
-        print(actualPortReturns)
+        actualPortReturn= (169*256)+int(actualPortReturns)
+        #print(actualPortReturns)
+
+        command=input("FTP Command:")
+        commandSend=command + "\r\n"
+        message = bytes(commandSend, 'utf-8')
+        commandSocket.send(message)
+
+
+
         dataSocket = socket(AF_INET, SOCK_STREAM)  # TCP SOCKET
-        dataSocket.connect((serverName, int(actualPortReturns)))
-        serverMessage = dataSocket.recv(1024).decode('utf-8')
-        print(serverMessage)
+        dataSocket.connect((serverName, actualPortReturn))
+        #serverMessage = dataSocket.recv(1024).decode('utf-8')
+        #print(serverMessage)
+        with open('received_file.txt', 'wb') as f:
+            print("file opened")
+            while True:
+                print('receiving data...')
+                data = commandSocket.recv(1024)
+                print('data=%s', (data))
+                if not data:
+                    break
+                    # write data to a file
+                f.write(data)
+
+        f.close()
+        print("-------------")
+
 temp=input("Press enter to exit")
