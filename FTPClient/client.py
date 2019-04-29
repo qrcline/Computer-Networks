@@ -97,6 +97,7 @@ while 1:
     serverMessage=str(serverMessage)
     print(serverMessage)
 
+
     if(command=="PASV"):
         print("Entering PASV code")
     #     portReturns=serverMessage[45:]
@@ -116,28 +117,48 @@ while 1:
         #print(actualPortReturns)
 
         command=input("FTP Command:")
-        commandSend=command + "\r\n"
-        message = bytes(commandSend, 'utf-8')
-        commandSocket.send(message)
+        if(command[:4]=="RETR"):
+            commandSend=command + "\r\n"
+            message = bytes(commandSend, 'utf-8')
+            commandSocket.send(message)
+            dataSocket = socket(AF_INET, SOCK_STREAM)  # TCP SOCKET
+            dataSocket.connect((serverName, actualPortReturn))
 
+            print(serverMessage)
 
+            with open('received_file.txt', 'wb') as f:
+                print("file opened")
+                while True:
+                    print('receiving data...')
+                    data = dataSocket.recv(1024)
+                    print('data=%s', (data))
+                    if not data:
+                        break
+                        # write data to a file
+                    f.write(data)
+            dataSocket.close()
+            f.close()
+        elif(command[:4]=="list"):
+            commandSend=command + "\r\n"
+            message = bytes(commandSend, 'utf-8')
+            commandSocket.send(message)
+            dataSocket = socket(AF_INET, SOCK_STREAM)  # TCP SOCKET
+            dataSocket.connect((serverName, actualPortReturn))
+            serverMessage = dataSocket.recv(1024).decode('utf-8')
+            print(serverMessage)
+        # with open('received_file.txt', 'wb') as f:
+        #     print("file opened")
+        #     while True:
+        #         print('receiving data...')
+        #         data = commandSocket.recv(1024)
+        #         print('data=%s', (data))
+        #         if not data:
+        #             break
+        #             # write data to a file
+        #         f.write(data)
 
-        dataSocket = socket(AF_INET, SOCK_STREAM)  # TCP SOCKET
-        dataSocket.connect((serverName, actualPortReturn))
-        #serverMessage = dataSocket.recv(1024).decode('utf-8')
-        #print(serverMessage)
-        with open('received_file.txt', 'wb') as f:
-            print("file opened")
-            while True:
-                print('receiving data...')
-                data = commandSocket.recv(1024)
-                print('data=%s', (data))
-                if not data:
-                    break
-                    # write data to a file
-                f.write(data)
-
-        f.close()
+        # f.close()
+            dataSocket.close()
         print("-------------")
 
 temp=input("Press enter to exit")
