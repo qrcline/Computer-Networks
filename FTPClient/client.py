@@ -192,7 +192,11 @@ while 1:
             #         f.write(data)
 
             # f.close()
+            while(message[:3]!="226"):
+                serverMessage = dataSocket.recv(1024).decode('utf-8')
+                print(serverMessage)
             dataSocket.close()
         print("-------------")
+
 
 temp=input("Press enter to exit")
