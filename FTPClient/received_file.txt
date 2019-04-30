@@ -1,1 +1,10 @@
+<<<<<<< HEAD
 Hello there!
+=======
+Quinton Cline
+
+OBI-WAN: Hello there!
+
+GENERAL GRIEVOUS: General Kenobi, you are a bold one.
+123456789
+>>>>>>> master

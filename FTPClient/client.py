@@ -162,12 +162,54 @@ while 1:
         #         f.write(data)
 
         # f.close()
+<<<<<<< HEAD
 
         while(serverMessage[:3]!="226"):
             serverMessage = commandSocket.recv(1024).decode('utf-8')
             print(serverMessage)
         dataSocket.close()
         print("Path Closed")
+=======
+            dataSocket.close()
+        elif (command[:4] == "STOR"):
+            print("in STOR")
+            commandSend = command + "\r\n"
+            message = bytes(commandSend, 'utf-8')
+            commandSocket.send(message)
+            dataSocket = socket(AF_INET, SOCK_STREAM)  # TCP SOCKET
+            dataSocket.connect((serverName, actualPortReturn))
+            fileDirectory=input("File to send: ")
+            #open the file from computer and send to the server
+            f = open(fileDirectory, "r")
+            if f.mode == 'r':
+                contents = f.read()
+            f.close()
+            dataSocket.close()
+
+
+            message = bytes(contents, 'utf-8')
+            dataSocket.send(message)
+            print("in STOR send")
+            #serverMessage = dataSocket.recv(1024).decode('utf-8')
+           # print(serverMessage)
+            # with open('received_file.txt', 'wb') as f:
+            #     print("file opened")
+            #     while True:
+            #         print('receiving data...')
+            #         data = commandSocket.recv(1024)
+            #         print('data=%s', (data))
+            #         if not data:
+            #             break
+            #             # write data to a file
+            #         f.write(data)
+
+            # f.close()
+            while(message[:3]!="226"):
+                serverMessage = dataSocket.recv(1024).decode('utf-8')
+                print(serverMessage)
+            dataSocket.close()
+>>>>>>> master
         print("-------------")
+
 
 temp=input("Press enter to exit")
