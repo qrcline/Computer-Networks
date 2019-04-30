@@ -126,7 +126,7 @@ while 1:
 
             print(serverMessage)
 
-            with open('received_file.txt', 'wb') as f:
+            with open('file.txt', 'wb') as f:
                 print("file opened")
                 while True:
                     print('receiving data...')
@@ -162,15 +162,7 @@ while 1:
         #         f.write(data)
 
         # f.close()
-<<<<<<< HEAD
-
-        while(serverMessage[:3]!="226"):
-            serverMessage = commandSocket.recv(1024).decode('utf-8')
-            print(serverMessage)
-        dataSocket.close()
-        print("Path Closed")
-=======
-            dataSocket.close()
+            
         elif (command[:4] == "STOR"):
             print("in STOR")
             commandSend = command + "\r\n"
@@ -184,7 +176,7 @@ while 1:
             if f.mode == 'r':
                 contents = f.read()
             f.close()
-            dataSocket.close()
+            
 
 
             message = bytes(contents, 'utf-8')
@@ -204,11 +196,12 @@ while 1:
             #         f.write(data)
 
             # f.close()
-            while(message[:3]!="226"):
-                serverMessage = dataSocket.recv(1024).decode('utf-8')
-                print(serverMessage)
-            dataSocket.close()
->>>>>>> master
+            
+        while(serverMessage[:3]!="226"):
+            serverMessage = commandSocket.recv(1024).decode('utf-8')
+            
+            print(serverMessage)
+        dataSocket.close()   
         print("-------------")
 
 
