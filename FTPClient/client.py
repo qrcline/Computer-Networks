@@ -114,7 +114,7 @@ while 1:
         portReturns=serverMessage[-7:]
         actualPortReturns=portReturns[:3]
         actualPortReturn= (169*256)+int(actualPortReturns)
-        #print(actualPortReturns)
+
 
         command=input("FTP Command:")
         if(command[:4]=="RETR"):
@@ -123,8 +123,9 @@ while 1:
             commandSocket.send(message)
             dataSocket = socket(AF_INET, SOCK_STREAM)  # TCP SOCKET
             dataSocket.connect((serverName, actualPortReturn))
-
+            serverMessage = commandSocket.recv(1024).decode('utf-8')
             print(serverMessage)
+
 
             with open('file.txt', 'wb') as f:
                 print("file opened")
@@ -138,6 +139,10 @@ while 1:
                     f.write(data)
 
             dataSocket.close()
+            serverMessage = commandSocket.recv(1024).decode('utf-8')
+            print(serverMessage)
+
+            print("-------------")
             f.close()
         elif(command[:4]=="list"):
             commandSend=command + "\r\n"
@@ -145,25 +150,31 @@ while 1:
             commandSocket.send(message)
             dataSocket = socket(AF_INET, SOCK_STREAM)  # TCP SOCKET
             dataSocket.connect((serverName, actualPortReturn))
+            serverMessage = commandSocket.recv(1024).decode('utf-8')
+            print(serverMessage)
             serverMessage = dataSocket.recv(1024).decode('utf-8')
             print(serverMessage)
+            dataSocket.close()
+            serverMessage = commandSocket.recv(1024).decode('utf-8')
+            print(serverMessage)
+            print("-------------")
 
 
 
-            
+
         elif (command[:4] == "STOR"):
             print("in STOR")
             commandSend = command + "\r\n"
             message = bytes(commandSend, 'utf-8')
             commandSocket.send(message)
-           
-            
+
+
             dataSocket = socket(AF_INET, SOCK_STREAM)  # TCP SOCKET
             dataSocket.connect((serverName, actualPortReturn))
             fileDirectory=input("File to send: ")
             #open the file from computer and send to the server
             f = open(fileDirectory, "r")
-            
+
             for content in f:
                 dataSocket.send(content.encode())
                 print(content)
@@ -172,14 +183,17 @@ while 1:
             serverMessage = commandSocket.recv(1024).decode('utf-8')
             print(serverMessage)
             print("in STOR send")
-           
-            
-        while(serverMessage[:3]!="226"):
             serverMessage = commandSocket.recv(1024).decode('utf-8')
-            
             print(serverMessage)
-        dataSocket.close()   
-        print("-------------")
+            dataSocket.close()
+            print("-------------")
+        else:
+
+            print("nonValid command in PASV")
+
+
+
+
 
 
 temp=input("Press enter to exit")
